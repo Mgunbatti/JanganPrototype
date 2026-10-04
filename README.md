@@ -1,70 +1,111 @@
-# Jangan Prototype — Unreal Engine 5.8.3
+# JanganPrototype
 
-## Açılış
+**Unreal Engine 5.8 C++ MMORPG systems prototype**
 
-`JanganPrototype.uproject` dosyasını Unreal Engine 5.8 ile açın.
-İlk açılışta shader derleme işleminin bitmesini bekleyin.
+JanganPrototype is an in-development MMORPG engineering project focused on persistent-world systems, server-authoritative gameplay, data-driven itemization, economy design, combat architecture, and scalable backend foundations.
 
-- Varsayılan harita: `/Game/Jangan/Maps/Jangan_Day`.
-- Gece haritası: `/Game/Jangan/Maps/Jangan_Night`.
-- Content Browser içinde `Jangan/Maps` klasöründen haritayı açın.
-- Play düğmesi: üçüncü şahıs karakterle dolaşım.
-- WASD: hareket, fare: kamera, Space: zıplama, Esc: oyundan çıkış.
+The project takes inspiration from the pacing and equipment philosophy of classic Silk Road-era MMORPGs while being developed as an independent implementation with original code, systems, and project structure.
 
-## Şehir
+> **Status:** Early systems prototype. Core item definitions and the first Chinese weapon/shield data model are implemented. Networking, persistence, combat, inventory, economy, and live-server infrastructure are planned/in progress.
 
-Yaklaşık 260 x 280 metre sur içi yerleşim. Güney giriş kapısı,
-merkezi altın ejderha meydanı, kuzeyde Daming Palace yorumlaması,
-pazar tezgâhları, avlulu konutlar ve köprülü bahçe.
+## Current milestone
 
-Gece ayrı bir haritadır; otomatik gündüz/gece döngüsü bulunmaz.
-Ejderha, kıvrımlı gövdesi, boynuzları, bıyıkları ve pençeleri olan
-özgün düşük poligonlu bir heykel prototipidir. Modeller üretim kalitesinde
-nihai sanat varlıkları değildir. Silkroad Online oyun varlıkları kullanılmadı.
-Üçüncü şahıs karakter ve giriş varlıkları, kurulu Unreal şablonundan alınmıştır.
+- Development environment and UE5 C++ project setup
+- Shared item enums and structs
+- Data-driven `FItemDefinition`
+- Degree / stage / seal data model
+- Chinese weapon types: Blade, Sword, Glavie, Spear, Bow
+- Shield and off-hand rules
+- Bow ammunition requirement model
+- 1st Degree Chinese equipment dataset validated in UE5 DataTable
+- Git-based source control workflow
 
-## Donanım hedefi
+The 1st Degree DataTable currently contains **18 equipment definitions**: 15 weapons and 3 shields. Binary UE content is intentionally excluded from this public repository.
 
-8 GB RAM ve RTX 3050 Ti için DX11, Lumen kapalı, sanal gölge haritaları
-kapalı, 1024 gölge çözünürlüğü ve %85 render ölçeği ayarlandı.
-Bu tercihler FPS garantisi değildir; performans ölçülmelidir.
-İlk kullanımda Engine Scalability ayarlarını Medium seçebilirsiniz.
+## Technical direction
 
-Bu çalışma çevre ve dolaşım prototipidir. MMO sunucusu, görevler,
-NPC yapay zekâsı, ekonomi ve kalıcı oyuncu verileri henüz yoktur.
+- **Engine:** Unreal Engine 5.8.x
+- **Gameplay:** C++
+- **Data:** Unreal DataTables / reflected USTRUCTs
+- **World tooling:** Unreal Python scripts
+- **Networking goal:** server-authoritative multiplayer
+- **Persistence goal:** PostgreSQL-backed character, inventory, economy, and progression data
+- **Deployment goal:** cost-conscious Linux dedicated server architecture
+- **Version control:** Git + GitHub
 
-## Doğrulama
+## Item-system foundation
 
-İki harita Unreal 5.8.3 ile oluşturuldu, açıldı ve kaydedildi.
-Karakter, GameMode ve PlayerController Blueprint'leri editörde derlendi.
-Ejderha ve çatının eksenleri, şehir zemini, saray ve oyuncu başlangıç
-konumları `validation_report.json` dosyasında kontrol edildi.
-`Previews` klasöründeki PNG'ler gerçek Unreal viewport görüntüleridir.
-Canlı kullanıcı etkileşimi nedeniyle Play hareket testi ve FPS ölçümü tamamlanmadı.
+The current item model separates static definitions from future player-owned runtime instances.
 
-## Yeniden üretme
+```text
+FItemDefinition
+├── Identity
+├── Degree / DegreeStage
+├── SealTier
+├── EquipmentSlot
+├── WeaponType
+├── OffHandRule
+├── WeaponStats
+├── ShieldStats
+└── Economy metadata
 
-`Scripts/build_city.py`, Unreal Python API ile malzemeleri, özgün OBJ
-modellerini ve iki haritayı üretir. Bu betik yalnızca üretilmiş haritaları
-yeniden oluşturur; el ile yapılan sahne düzenlemeleri önce yedeklenmelidir.
-`SourceAssets` kaynak OBJ dosyalarını, `build_report.json` üretim sonucunu içerir.
-Model geometrisi betikte değiştirilirse `FORCE_REIMPORT = True` seçilmelidir.
-Üretim sırasında aynı projenin başka bir editör kopyası açık olmamalıdır.
-
-Örnek (PowerShell, proje klasöründe):
-
-```powershell
-& 'C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor-Cmd.exe' "$PWD\JanganPrototype.uproject" -run=pythonscript "-script=$PWD\Scripts\build_city.py" -unattended -nullrhi -nosplash
+Future:
+FItemInstance
+├── Unique instance ID
+├── Definition reference
+├── Enhancement level (+)
+├── Current durability
+├── Alchemy modifiers
+└── Magic options
 ```
 
-Doğu/batı kapıları: Güney kapısının aynı mimarisiyle iki geçiş eklendi. Yan surlar bölündü, doğu-batı yolu uzatıldı. Gündüz/gece kapı merkezleri çarpışma izi ile kontrol edildi. Renkler sıcak taş, kırmızı ahşap ve yeşim çatılarla güncellendi; gökyüzü IsSky ve ortam ışığı ayarları kaydedildi. Güncelleme: Scripts/add_side_gates.py.
+This separation is intended to support persistent inventory, alchemy, secure trading, rollback-safe database transactions, and anti-duplication validation later in development.
 
-NPC yerleşimi: Ejderha–South Gate caddesinin batısında Demirci/Zırhçı/Ahır, doğusunda İksirci/Bakkal/Özel Eşya olmak üzere üçer dükkân. Depocu merkezde; Legends Gate kuzeydoğuda, Oyun Evi doğuda, Avcı Birliği kuzeybatıda. Toplam 10 sabit, geçici Manny NPC; isim ve dükkân tabelaları. Konuşma/alışveriş davranışı henüz yok. Gündüz ve gece haritaları tekrar açılarak animasyon kalıcılığı ve NPC zemini doğrulandı. Scripts/place_npc_shops.py, npc_layout_report.json ve npc_validation.json.
+## Chinese weapon model
 
-Yerleşim düzeltmesi: Kullanıcı isteğiyle tüm NPC, dükkân ve tabelalar yatay eksende karşı tarafa taşındı. Ejderha–South Gate yönündeki mesafeler ve yükseklikler korundu. Girişler caddeye bakar. Dış sıradaki konut eşleri de takas edilerek üst üste binme önlendi. İki harita kaydedildi; npc_mirror_report.json konumların öncesi/sonrasını içerir.
+| Type | Slot behavior | Design direction |
+|---|---|---|
+| Blade | Main Hand + Shield allowed | Physical-leaning one-hand weapon |
+| Sword | Main Hand + Shield allowed | Magical-leaning one-hand weapon |
+| Glavie | Main Hand, off-hand blocked | Physical-leaning two-hand weapon |
+| Spear | Main Hand, off-hand blocked | Magical-leaning two-hand weapon |
+| Bow | Main Hand + Arrow required | Ranged hybrid weapon |
+| Shield | Off Hand | Defensive equipment |
 
-Kışla: Eski havuz/bahçe ve Avcı Birliği binasının yerine Tang döneminden esinlenen avlulu kışla kuruldu. Komutanlık, iki koğuş, tek çatılı ana kapı, alçak duvarlar, talim zemini, küçük ahır ve su teknesi. Avcı Birliği NPC'si girişe taşındı. Gündüz/gece haritaları kaydedildi; kapı çarpışma izi temiz, avlu zemini engelleme çarpışmasına sahip. Önceki haritalar /Game/Jangan/Backups altında saklı. İnce dekor ve asker davranışları sonraki aşama.
+## Repository structure
 
-Temple garden: warm ivory/jade/bronze seven-tier pagoda and stylized seated Buddha blockout. Main palace expanded 12% horizontally and 30% above its terrace. Prayer hall removed; organic pond mesh with lotus planting and walkable stepped timber bridge. Both day/night maps saved with BeforeTemple and BeforeOrganicGarden backups. Rebuild includes build_temple.py and refine_temple_garden.py.
+```text
+Config/                         Unreal project configuration
+Scripts/                        Unreal Python world/prototyping tools
+Source/JanganPrototype/        C++ game module
+Source/JanganPrototype/Items/  Item-system data types
+docs/                           Architecture and roadmap
+```
 
-Legends monument update: Buddha and its lotus dais moved to the former Legends Gate shop; cyan emissive halo and energy orbs mark the future teleport point (no gameplay teleport configured). Pagoda enlarged 15% horizontally and 10% vertically. Pond shifted 5m inward; bridge shortened 20% and shifted inward. Both approach floors and 26 walking-lane rays verified in each map. update_legends_monument.py is included in rebuild.
+Large generated folders, UE binaries, local caches, source assets, and public-game content are intentionally excluded through `.gitignore`.
+
+## Architecture
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Roadmap
+
+See [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Build notes
+
+The repository represents engineering source and documentation rather than a complete redistributable game package. Unreal `Content/`, generated binaries, caches, previews, and source art are intentionally excluded.
+
+For local development, use the matching Unreal Engine version and regenerate project files as needed from `JanganPrototype.uproject`.
+
+## Project ownership
+
+This is a **proprietary portfolio / development repository**, not an open-source project.
+
+No license is granted to reuse, redistribute, commercialize, or create derivative works from this repository except for rights that may be required by GitHub's Terms of Service. See [LICENSE](LICENSE) for details.
+
+Third-party trademarks belong to their respective owners. This project is not affiliated with or endorsed by Joymax or any other third-party game publisher, and no original Silkroad Online game assets are intended to be distributed in this repository.
+
+---
+
+**Current focus:** Degree & Equipment Progression → Seal / SOx → Item Instance → Inventory
