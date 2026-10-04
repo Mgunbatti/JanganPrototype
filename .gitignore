@@ -1,0 +1,54 @@
+# ==========================================
+# Unreal Engine generated files
+# ==========================================
+
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# ==========================================
+# Visual Studio / IDE
+# ==========================================
+
+.vs/
+.vscode/
+*.sln
+*.slnx
+*.VC.db
+*.VC.opendb
+.vsconfig
+
+# ==========================================
+# Build / temporary files
+# ==========================================
+
+*.log
+*.tmp
+*.cache
+
+# ==========================================
+# Large Unreal content
+# Public portfolio repo: keep binaries out
+# ==========================================
+
+Content/
+SourceAssets/
+Previews/
+
+# ==========================================
+# Generated project reports
+# ==========================================
+
+*_report.json
+npc_validation.json
+validation_report.json
+palette_applied.txt
+
+# ==========================================
+# OS files
+# ==========================================
+
+Thumbs.db
+Desktop.ini
+.DS_Store
