@@ -11,7 +11,7 @@ This roadmap tracks the engineering order for JanganPrototype. It is intentional
 - [x] Item Definition System
 - [x] Chinese 1st Degree equipment dataset
 - [x] Degree & Equipment Progression System
-- [ ] Seal / SOx Tier System
+- [x] Seal / SOx Tier System
 - [ ] Item Instance System
 
 ## Phase 2 — Inventory & equipment
@@ -161,14 +161,14 @@ This roadmap tracks the engineering order for JanganPrototype. It is intentional
 
 ## Current focus
 
-**Seal / SOx Tier System**
+**Item Instance System**
 
 Immediate sequence:
 
 ```text
 Degree Progression ✅
       ↓
-Seal / SOx
+Seal / SOx ✅
       ↓
 Item Instance
       ↓
