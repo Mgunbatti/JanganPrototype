@@ -38,6 +38,7 @@ This roadmap tracks the engineering order for JanganPrototype. It is intentional
 
 ## Phase 4 — Combat
 
+- [x] Damage formula specification
 - [ ] Target selection / tab-target
 - [ ] Basic attacks
 - [ ] Skill casting
