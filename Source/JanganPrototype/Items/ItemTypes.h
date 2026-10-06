@@ -71,7 +71,6 @@ enum class ESealTier : uint8
 {
     Normal      UMETA(DisplayName = "Normal"),
     SealOfStar  UMETA(DisplayName = "Seal of Star"),
-    SealOfNova  UMETA(DisplayName = "Seal of Nova"),
     SealOfMoon  UMETA(DisplayName = "Seal of Moon"),
     SealOfSun   UMETA(DisplayName = "Seal of Sun")
 };
