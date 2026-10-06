@@ -10,7 +10,7 @@ This roadmap tracks the engineering order for JanganPrototype. It is intentional
 - [x] Core enums, structs & shared item data types
 - [x] Item Definition System
 - [x] Chinese 1st Degree equipment dataset
-- [ ] Degree & Equipment Progression System
+- [x] Degree & Equipment Progression System
 - [ ] Seal / SOx Tier System
 - [ ] Item Instance System
 
@@ -161,12 +161,12 @@ This roadmap tracks the engineering order for JanganPrototype. It is intentional
 
 ## Current focus
 
-**Degree & Equipment Progression System**
+**Seal / SOx Tier System**
 
 Immediate sequence:
 
 ```text
-Degree Progression
+Degree Progression ✅
       ↓
 Seal / SOx
       ↓
